@@ -8,12 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var contentViewModel = ContentViewModel()
+    @State var city = ""
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            TextField("City Name", text: $city)
+            Text(contentViewModel.searchHistory.last?.cityName ?? "")
+            Text(contentViewModel.searchHistory.last?.conditionName ?? "")
+            Text(contentViewModel.searchHistory.last?.temperatureString ?? "")
+            
+            Button {
+                contentViewModel.getWeatherFromCity(city: city, unit: .metric)
+            } label: {
+                Text("Get Data")
+            }
+
         }
         .padding()
     }
