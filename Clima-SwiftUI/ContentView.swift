@@ -13,17 +13,19 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            TextField("City Name", text: $city)
-            Text(contentViewModel.searchHistory.last?.cityName ?? "")
-            Text(contentViewModel.searchHistory.last?.conditionName ?? "")
-            Text(contentViewModel.searchHistory.last?.temperatureString ?? "")
+            HStack {
+                TextField("City Name", text: $city)
+                Button {
+                    contentViewModel.getWeatherFromCity(city: city, unit: .metric)
+                    city = ""
+                } label: {
+                    Image(systemName: "magnifyingglass")
+                }
+            }.padding()
             
-            Button {
-                contentViewModel.getWeatherFromCity(city: city, unit: .metric)
-            } label: {
-                Text("Get Data")
-            }
-
+            Text(contentViewModel.searchHistory.last?.cityName ?? "")
+            Image(systemName: contentViewModel.searchHistory.last?.conditionName ?? "")
+            Text(contentViewModel.searchHistory.last?.temperatureString ?? "")
         }
         .padding()
     }
