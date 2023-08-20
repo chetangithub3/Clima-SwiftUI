@@ -27,27 +27,16 @@ class ContentViewModel: ObservableObject {
         let url = baseURL + units + "&q=\(city)"
         print(url)
         guard let url = URL(string: url) else {return}
-        fetchURLResponse(from: url)
+        fetchData(from: url)
     }
     func getWeatherFromLocation(unit: Units) {
         
     }
     
-    func fetchURLResponse(from url: URL) {
+    func fetchData(from url: URL) {
         
-        URLSession.shared.dataTaskPublisher(for: url)
-            .subscribe(on: DispatchQueue.global(qos: .background))
-            .receive(on: DispatchQueue.main)
-            .tryMap { (data, response) -> Data in
-                guard let response = response as? HTTPURLResponse, response.statusCode >= 200 && response.statusCode < 300 else {
-                    throw URLError(URLError.badServerResponse)
-                }
-                
-                return data
-                
-            }
-            .decode(type: WeatherData.self, decoder: JSONDecoder())
-            .sink { (completion) in
+        APIManager.publisher(for: url)
+            .sink (receiveCompletion: { (completion) in
                 switch completion {
                     case .finished:
                         return
@@ -55,13 +44,14 @@ class ContentViewModel: ObservableObject {
                         print(error.localizedDescription)
                 }
                 print("completion - \(completion)")
-            } receiveValue: {[weak self] weatherData in
-                guard let self = self else {return}
+            }, receiveValue: { (weatherData: WeatherData) in
+               
                 if let name = weatherData.name, let condition = weatherData.weather?.first?.id, let temp = weatherData.main?.temp {
                     let weatherModel = WeatherModel(cityName: name, conditonID: condition, temperature: Float(temp))
                     self.searchHistory.append(weatherModel)
                 }
                 
-            }.store(in: &cancellebles)
+            })
+            .store(in: &cancellebles)
     }
 }
