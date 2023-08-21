@@ -13,8 +13,7 @@ import UIKit
 enum Units: String {
     
     case metric = "metric"
-    case kelvin = "kelvin"
-    case farh = "fahrenheit"
+    case imperial = "imperial"
 }
 
 class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -36,13 +35,13 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
-    func handleLocation() {
+    func handleLocation(unit: Units) {
         let locationStatus = locationManager.authorizationStatus
         switch locationStatus {
             case .authorizedAlways, .authorizedWhenInUse:
                 let location = locationManager.location
                 if let lat = location?.coordinate.latitude, let lon = location?.coordinate.longitude {
-                    getWeatherFromLocation(unit: .metric, lat: lat, lon: lon)
+                    getWeatherFromLocation(unit: unit, lat: lat, lon: lon)
                 }
                 break
             case .denied:

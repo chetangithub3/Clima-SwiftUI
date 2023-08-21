@@ -11,7 +11,7 @@ import SwiftUI
 struct Clima_SwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView( units: "C")
         }
     }
 }
