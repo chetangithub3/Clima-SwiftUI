@@ -65,7 +65,15 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
               UIApplication.shared.open(url, options: [:], completionHandler: nil)
           }
       }
-
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if manager.authorizationStatus == .authorizedAlways || manager.authorizationStatus == .authorizedWhenInUse {
+            let location = locationManager.location
+            if let lat = location?.coordinate.latitude, let lon = location?.coordinate.longitude {
+                getWeatherFromLocation(unit: .metric, lat: lat, lon: lon)
+            }
+        }
+    }
     
     func getWeatherFromCity(city: String, unit: Units) {
         let baseURL = "https://api.openweathermap.org/data/2.5/weather?appid=04720e6c5a6808a994667a251ec0199a"
