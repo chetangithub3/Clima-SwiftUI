@@ -70,7 +70,9 @@ import UIKit
 
 
 
-struct WeatherModel{
+struct WeatherModel: Identifiable{
+    var id = UUID()
+    
     let cityName: String
     let conditonID: Int
     let temperature: Float
