@@ -51,6 +51,7 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             case .notDetermined:
                 locationManager.requestWhenInUseAuthorization()
             case .restricted:
+                openAppSettings()
                 break
             default:
                 locationManager.requestWhenInUseAuthorization()
