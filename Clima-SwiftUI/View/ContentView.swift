@@ -22,6 +22,8 @@ struct ContentView: View {
                         contentViewModel.handleLocation(unit: selectedUnit)
                     } label: {
                         Image(systemName: "location.magnifyingglass")
+                            .resizable()
+                            .frame(width: 30, height: 30)
                     }
                     
                     TextField("City Name", text: $city)
@@ -30,12 +32,16 @@ struct ContentView: View {
                         city = ""
                     } label: {
                         Image(systemName: "magnifyingglass")
+                            .resizable()
+                            .frame(width: 30, height: 30)
                     }
-                }.padding()
+                }
                 HStack(alignment: .center, spacing: 20) {
                     VStack{
                         Text(contentViewModel.searchHistory.last?.cityName ?? "")
                         Image(systemName: contentViewModel.searchHistory.last?.conditionName ?? "")
+                            .resizable()
+                            .frame(width: 100, height: 100)
                         HStack(spacing: 0){
                             Text(contentViewModel.searchHistory.last?.temperatureString ?? "" )
                             Text(units)

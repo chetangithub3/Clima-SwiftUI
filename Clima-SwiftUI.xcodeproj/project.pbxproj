@@ -25,6 +25,7 @@
 		61CAE9BE2A9282EF00A8E6B9 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		61CAE9C02A92833000A8E6B9 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		61CAE9C22A92B0D800A8E6B9 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		61CAE9C72A933F3900A8E6B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +58,7 @@
 		61CAE9AF2A92815000A8E6B9 /* Clima-SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				61CAE9C72A933F3900A8E6B9 /* Info.plist */,
 				61CAE9B02A92815000A8E6B9 /* Clima_SwiftUIApp.swift */,
 				61CAE9C52A93066A00A8E6B9 /* View */,
 				61CAE9C42A93066200A8E6B9 /* Model */,
@@ -306,6 +308,7 @@
 				DEVELOPMENT_TEAM = H8X7BGGD4F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Clima-SwiftUI/Info.plist";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Clima uses location data to determine weather at your current location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -336,6 +339,7 @@
 				DEVELOPMENT_TEAM = H8X7BGGD4F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Clima-SwiftUI/Info.plist";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Clima uses location data to determine weather at your current location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
