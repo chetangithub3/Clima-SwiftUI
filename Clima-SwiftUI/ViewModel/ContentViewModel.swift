@@ -84,19 +84,33 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     func getWeatherFromCity(city: String, unit: Units) {
         let baseURL = "https://api.openweathermap.org/data/2.5/weather?appid=04720e6c5a6808a994667a251ec0199a"
         let units = "&units=\(unit.rawValue)"
-        let url = baseURL + units + "&q=\(city)"
-        print(url)
+        let url = baseURL +  "&q=\(city)" + units
         guard let url = URL(string: url) else {return}
         fetchData(from: url)
     }
     func getWeatherFromLocation(unit: Units, lat: Double, lon: Double) {
         let baseURL = "https://api.openweathermap.org/data/2.5/weather?appid=04720e6c5a6808a994667a251ec0199a"
         let units = "&units=\(unit.rawValue)"
-        let url = baseURL + units + "&lat=\(lat)&lon=\(lon)"
+        let url = baseURL +  "&lat=\(lat)&lon=\(lon)" + units
         guard let url = URL(string: url) else {return}
         fetchData(from: url)
     }
-    
+    func getWeatherOnChangeOfUnits(newUnit: Units){
+        guard var urlString = lastSearchURL?.absoluteString else { return  }
+        var truncated = truncateString(urlString, fromSubstring: "&units=")
+        var newURL = truncated + "&units=\(newUnit.rawValue)"
+        guard let url = URL(string: newURL) else {return}
+        fetchData(from: url)
+        
+        
+    }
+    func truncateString(_ input: String, fromSubstring substring: String) -> String {
+           if let range = input.range(of: substring) {
+               let truncatedString = input.prefix(upTo: range.lowerBound)
+               return String(truncatedString)
+           }
+           return input
+       }
     func fetchData(from url: URL) {
         lastSearchURL = url
         APIManager.publisher(for: url)

@@ -49,8 +49,8 @@ struct ContentView: View {
                         }.pickerStyle(.menu)
                     }.onChange(of: selectedUnit) { newValue in
                         units = selectedUnit == .imperial ? "°F" : "°C"
-                        if let url = lastSearchURL{
-                            contentViewModel.fetchData(from: url)
+                        if lastSearchURL != nil{
+                            contentViewModel.getWeatherOnChangeOfUnits(newUnit: newValue)
                         }
                     }
                 }
