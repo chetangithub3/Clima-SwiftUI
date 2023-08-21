@@ -18,7 +18,7 @@ enum Units: String {
 
 class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @AppStorage("lastSearchURL") var lastSearchURL: URL?
-    
+
     var cancellebles = Set<AnyCancellable>()
     private var locationManager = CLLocationManager()
     var ignoredOnLaunch = false

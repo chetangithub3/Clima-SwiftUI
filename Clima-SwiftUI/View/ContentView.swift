@@ -55,6 +55,13 @@ struct ContentView: View {
                     }
                 }
                 Spacer()
+                NavigationLink {
+                    SearchHistoryView().environmentObject(contentViewModel)
+                } label: {
+                    Text("Search History")
+                }
+
+             
             }.padding()
             .navigationTitle("Clima-SwiftUI")
             .onAppear {
@@ -67,6 +74,25 @@ struct ContentView: View {
     }
 }
 
+struct SearchHistoryView: View {
+    @EnvironmentObject var contentViewModel: ContentViewModel
+    var body: some View {
+        List{
+            ForEach(contentViewModel.searchHistory.reversed()) { item in
+                Section{
+                    VStack{
+                        Text(item.cityName)
+                        Image(item.conditionName)
+                        HStack(spacing: 0){
+                            Text(item.temperatureString)
+                        }
+                    }
+                }
+               
+            }
+        }.navigationTitle("Search History")
+    }
+}
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView( units: "C")
