@@ -21,7 +21,7 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     var cancellebles = Set<AnyCancellable>()
     private var locationManager = CLLocationManager()
-    
+    var ignoredOnLaunch = false
     @Published var searchHistory: [WeatherModel] = []
     @Published var latitude: Double = 0.0
     @Published var longitude: Double = 0.0
@@ -67,6 +67,18 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
           }
       }
     
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if !ignoredOnLaunch {
+            ignoredOnLaunch.toggle()
+           return
+        }
+        if manager.authorizationStatus == .authorizedAlways || manager.authorizationStatus == .authorizedWhenInUse {
+            let location = locationManager.location
+            if let lat = location?.coordinate.latitude, let lon = location?.coordinate.longitude {
+                getWeatherFromLocation(unit: .metric, lat: lat, lon: lon)
+            }
+        }
+    }
 
     
     func getWeatherFromCity(city: String, unit: Units) {
