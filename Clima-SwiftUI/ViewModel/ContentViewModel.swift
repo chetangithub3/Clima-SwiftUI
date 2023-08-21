@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import CoreLocation
 import UIKit
-
+import SwiftUI
 enum Units: String {
     
     case metric = "metric"
@@ -17,6 +17,7 @@ enum Units: String {
 }
 
 class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
+    @AppStorage("lastSearchURL") var lastSearchURL: URL?
     
     var cancellebles = Set<AnyCancellable>()
     private var locationManager = CLLocationManager()
@@ -66,14 +67,7 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
           }
       }
     
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        if manager.authorizationStatus == .authorizedAlways || manager.authorizationStatus == .authorizedWhenInUse {
-            let location = locationManager.location
-            if let lat = location?.coordinate.latitude, let lon = location?.coordinate.longitude {
-                getWeatherFromLocation(unit: .metric, lat: lat, lon: lon)
-            }
-        }
-    }
+
     
     func getWeatherFromCity(city: String, unit: Units) {
         let baseURL = "https://api.openweathermap.org/data/2.5/weather?appid=04720e6c5a6808a994667a251ec0199a"
@@ -92,7 +86,7 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func fetchData(from url: URL) {
-        
+        lastSearchURL = url
         APIManager.publisher(for: url)
             .sink (receiveCompletion: { (completion) in
                 switch completion {

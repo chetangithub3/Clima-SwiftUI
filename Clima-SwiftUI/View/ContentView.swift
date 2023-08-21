@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("lastSearchURL") var lastSearchURL: URL?
     @StateObject var contentViewModel = ContentViewModel()
     @State var city = ""
     @State var selectedUnit = Units.imperial
-    
-    @State var units: String = "C"
+    @State var units: String = ""
     var body: some View {
         NavigationView {
             
@@ -36,8 +36,9 @@ struct ContentView: View {
                     VStack{
                         Text(contentViewModel.searchHistory.last?.cityName ?? "")
                         Image(systemName: contentViewModel.searchHistory.last?.conditionName ?? "")
-                        HStack{
+                        HStack(spacing: 0){
                             Text(contentViewModel.searchHistory.last?.temperatureString ?? "" )
+                            Text(units)
                         }
                     }
                     
@@ -46,11 +47,21 @@ struct ContentView: View {
                             Text("Metric").tag(Units.metric)
                             Text("Imperial").tag(Units.imperial)
                         }.pickerStyle(.menu)
+                    }.onChange(of: selectedUnit) { newValue in
+                        units = selectedUnit == .imperial ? "°F" : "°C"
+                        if let url = lastSearchURL{
+                            contentViewModel.fetchData(from: url)
+                        }
                     }
                 }
                 Spacer()
             }.padding()
             .navigationTitle("Clima-SwiftUI")
+            .onAppear {
+                if let url = lastSearchURL{
+                    contentViewModel.fetchData(from: url)
+                }
+            }
                 
         }
     }
