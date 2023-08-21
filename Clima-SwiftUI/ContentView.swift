@@ -14,6 +14,12 @@ struct ContentView: View {
     var body: some View {
         VStack {
             HStack {
+                Button {
+                    contentViewModel.handleLocation()
+                } label: {
+                    Image(systemName: "location.magnifyingglass")
+                }
+                
                 TextField("City Name", text: $city)
                 Button {
                     contentViewModel.getWeatherFromCity(city: city, unit: .metric)
