@@ -5,7 +5,10 @@
     //  Created by Chetan Dhowlaghar on 8/20/23.
     //
 
-    // Todo : Commenting the code better
+// Todo : downloading images
+// Upgrades needed: imperial and metric system implementation
+// Existing Bugs: 1. saves another entry in history if units changed as it makes another API call
+
 
 import SwiftUI
 
