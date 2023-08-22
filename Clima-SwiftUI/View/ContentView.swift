@@ -17,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             
-            VStack {
+            VStack(alignment: .leading) {
                 HStack {
                     Button {
                         contentViewModel.handleLocation(unit: selectedUnit)
@@ -34,6 +34,10 @@ struct ContentView: View {
                            .background(Color.white)
                            .cornerRadius(10)
                     Button {
+                        //TODO:
+                        // Search for how to add cities with multiple words like new york
+                        //currently fails
+                        city =  city.trimmingCharacters(in: .whitespacesAndNewlines)
                         contentViewModel.getWeatherFromCity(city: city, unit: selectedUnit)
                         city = ""
                     } label: {
@@ -58,7 +62,21 @@ struct ContentView: View {
                 } message: {
                     Text("Please enter a valid city name")
                 }
+                VStack(alignment: .leading){
+                    Picker(selection: $selectedUnit, label: Text("Units:")) {
+                        Text("Metric")
+                            .tag(Units.metric)
+                        Text("Imperial")
+                            .tag(Units.imperial)
+                    }.pickerStyle(.segmented)
+                }.padding(.vertical)
                 
+                .onChange(of: selectedUnit) { newValue in
+                    units = selectedUnit == .imperial ? "°F" : "°C"
+                    if lastSearchURL != nil{
+                        contentViewModel.getWeatherOnChangeOfUnits(newUnit: newValue)
+                    }
+                }
                 HStack(alignment: .center, spacing: 20) {
                     VStack{
                         Text(contentViewModel.searchHistory.last?.cityName ?? "")
@@ -71,27 +89,24 @@ struct ContentView: View {
                         }
                     }
                     
-                    VStack{
-                        Picker(selection: $selectedUnit, label: Text("Units:")) {
-                            Text("Metric").tag(Units.metric)
-                            Text("Imperial").tag(Units.imperial)
-                        }.pickerStyle(.menu)
-                    }.onChange(of: selectedUnit) { newValue in
-                        units = selectedUnit == .imperial ? "°F" : "°C"
-                        if lastSearchURL != nil{
-                            contentViewModel.getWeatherOnChangeOfUnits(newUnit: newValue)
-                        }
-                    }
+                   
                 }
                 Spacer()
                 Button {
                     showHistory = true
                 } label: {
-                    Text("Search History")
-                        .bold()
-                }.padding()
-                    .background(Color.white)
-                    .cornerRadius(10)
+                    HStack{
+                        Spacer()
+                        Text("Search History")
+                            .bold()
+                            .padding()
+                                .background(Color.white)
+                                .cornerRadius(10)
+                        Spacer()
+                    }
+                    
+                }
+                
                 
                 
             }.padding()

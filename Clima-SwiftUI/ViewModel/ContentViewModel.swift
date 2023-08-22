@@ -10,6 +10,7 @@ import Combine
 import CoreLocation
 import UIKit
 import SwiftUI
+
 enum Units: String {
     
     case metric = "metric"
@@ -47,6 +48,8 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                 }
                 break
             case .denied:
+                // TODO:
+                // can show alert first and then sent to settings on clicking OK on alert
                 openAppSettings()
                 break
             case .notDetermined:
@@ -69,6 +72,8 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
       }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        // TODO:
+        // patch provided temporarily to escape calling this following API on Launch
         if !ignoredOnLaunch {
             ignoredOnLaunch.toggle()
            return
