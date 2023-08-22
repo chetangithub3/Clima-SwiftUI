@@ -14,6 +14,7 @@ struct ContentView: View {
     @State var selectedUnit = Units.imperial
     @State var units: String = ""
     @State var showHistory = false
+    @State var showNoInputAlert = false
     var body: some View {
         NavigationView {
             
@@ -38,6 +39,10 @@ struct ContentView: View {
                         // Search for how to add cities with multiple words like new york
                         //currently fails
                         city =  city.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if city.isEmpty {
+                            showNoInputAlert = true
+                            return
+                        }
                         contentViewModel.getWeatherFromCity(city: city, unit: selectedUnit)
                         city = ""
                     } label: {
@@ -47,6 +52,13 @@ struct ContentView: View {
                     }.padding()
                         .background(Color.white)
                         .cornerRadius(10)
+                }
+                .alert("No input", isPresented: $showNoInputAlert) {
+                    Button("Ok") {
+                        contentViewModel.showServerErrorAlert = false
+                    }
+                } message: {
+                    Text("Please enter a city name")
                 }
                 .alert("Server Error", isPresented: $contentViewModel.showInputErrorAlert) {
                     Button("Ok") {
