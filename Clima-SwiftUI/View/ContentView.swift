@@ -23,20 +23,42 @@ struct ContentView: View {
                         contentViewModel.handleLocation(unit: selectedUnit)
                     } label: {
                         Image(systemName: "location.magnifyingglass")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
+                            .bold()
+                           
+                    }.padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
                     
                     TextField("City Name", text: $city)
+                        .padding()
+                           .background(Color.white)
+                           .cornerRadius(10)
                     Button {
                         contentViewModel.getWeatherFromCity(city: city, unit: selectedUnit)
                         city = ""
                     } label: {
                         Image(systemName: "magnifyingglass")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
+                            .bold()
+                            
+                    }.padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
                 }
+                .alert("Server Error", isPresented: $contentViewModel.showInputErrorAlert) {
+                    Button("Ok") {
+                        contentViewModel.showServerErrorAlert = false
+                    }
+                } message: {
+                    Text("Error retrieving weather info. Please try again.")
+                }
+                .alert("Input Error", isPresented: $contentViewModel.showInputErrorAlert) {
+                    Button("Ok") {
+                        contentViewModel.showInputErrorAlert = false
+                    }
+                } message: {
+                    Text("Please enter a valid city name")
+                }
+                
                 HStack(alignment: .center, spacing: 20) {
                     VStack{
                         Text(contentViewModel.searchHistory.last?.cityName ?? "")
@@ -66,11 +88,15 @@ struct ContentView: View {
                     showHistory = true
                 } label: {
                     Text("Search History")
-                }
+                        .bold()
+                }.padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
                 
                 
             }.padding()
                 .navigationTitle("Clima-SwiftUI")
+                .background(Color(red: 246/255, green: 244/255, blue: 235/255))
                 .onAppear {
                     if let url = lastSearchURL{
                         contentViewModel.fetchData(from: url)
@@ -79,24 +105,6 @@ struct ContentView: View {
                 .sheet(isPresented: $showHistory, content: {
                     SearchHistoryView(showHistory: $showHistory).environmentObject(contentViewModel)
                 })
-                .alert(isPresented: $contentViewModel.showInputErrorAlert) {
-                    Alert(
-                        title: Text("Input Error"),
-                        message: Text("Please enter a valid city name"),
-                        dismissButton: .cancel(Text("Ok"), action: {
-                            contentViewModel.showInputErrorAlert = false
-                        })
-                    )
-                }
-                .alert(isPresented: $contentViewModel.showServerErrorAlert) {
-                    Alert(
-                        title: Text("Server Error"),
-                        message: Text("Error retrieving weather info. Please try again."),
-                        dismissButton: .cancel(Text("Ok"), action: {
-                            contentViewModel.showServerErrorAlert = false
-                        })
-                    )
-                }
             
         }
     }
