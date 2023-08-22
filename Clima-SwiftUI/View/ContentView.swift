@@ -1,9 +1,9 @@
-//
-//  ContentView.swift
-//  Clima-SwiftUI
-//
-//  Created by Chetan Dhowlaghar on 8/20/23.
-//
+    //
+    //  ContentView.swift
+    //  Clima-SwiftUI
+    //
+    //  Created by Chetan Dhowlaghar on 8/20/23.
+    //
 
 import SwiftUI
 
@@ -13,6 +13,7 @@ struct ContentView: View {
     @State var city = ""
     @State var selectedUnit = Units.imperial
     @State var units: String = ""
+    @State var showHistory = false
     var body: some View {
         NavigationView {
             
@@ -44,7 +45,7 @@ struct ContentView: View {
                             .frame(width: 100, height: 100)
                         HStack(spacing: 0){
                             Text(contentViewModel.searchHistory.last?.temperatureString ?? "" )
-                            Text(units)
+                            
                         }
                     }
                     
@@ -61,44 +62,47 @@ struct ContentView: View {
                     }
                 }
                 Spacer()
-                NavigationLink {
-                    SearchHistoryView().environmentObject(contentViewModel)
+                Button {
+                    showHistory = true
                 } label: {
                     Text("Search History")
                 }
-
-             
-            }.padding()
-            .navigationTitle("Clima-SwiftUI")
-            .onAppear {
-                if let url = lastSearchURL{
-                    contentViewModel.fetchData(from: url)
-                }
-            }
                 
+                
+            }.padding()
+                .navigationTitle("Clima-SwiftUI")
+                .onAppear {
+                    if let url = lastSearchURL{
+                        contentViewModel.fetchData(from: url)
+                    }
+                }
+                .sheet(isPresented: $showHistory, content: {
+                    SearchHistoryView(showHistory: $showHistory).environmentObject(contentViewModel)
+                })
+                .alert(isPresented: $contentViewModel.showInputErrorAlert) {
+                    Alert(
+                        title: Text("Input Error"),
+                        message: Text("Please enter a valid city name"),
+                        dismissButton: .cancel(Text("Ok"), action: {
+                            contentViewModel.showInputErrorAlert = false
+                        })
+                    )
+                }
+                .alert(isPresented: $contentViewModel.showServerErrorAlert) {
+                    Alert(
+                        title: Text("Server Error"),
+                        message: Text("Error retrieving weather info. Please try again."),
+                        dismissButton: .cancel(Text("Ok"), action: {
+                            contentViewModel.showServerErrorAlert = false
+                        })
+                    )
+                }
+            
         }
     }
 }
 
-struct SearchHistoryView: View {
-    @EnvironmentObject var contentViewModel: ContentViewModel
-    var body: some View {
-        List{
-            ForEach(contentViewModel.searchHistory.reversed()) { item in
-                Section{
-                    VStack{
-                        Text(item.cityName)
-                        Image(item.conditionName)
-                        HStack(spacing: 0){
-                            Text(item.temperatureString)
-                        }
-                    }
-                }
-               
-            }
-        }.navigationTitle("Search History")
-    }
-}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView( units: "C")

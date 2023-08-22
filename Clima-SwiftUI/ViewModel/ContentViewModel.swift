@@ -25,7 +25,8 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var searchHistory: [WeatherModel] = []
     @Published var latitude: Double = 0.0
     @Published var longitude: Double = 0.0
-    
+    @Published var showInputErrorAlert = false
+    @Published var showServerErrorAlert = false
     override init() {
         super.init()
         setupLocationManager()
@@ -95,15 +96,15 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         guard let url = URL(string: url) else {return}
         fetchData(from: url)
     }
+    
     func getWeatherOnChangeOfUnits(newUnit: Units){
-        guard var urlString = lastSearchURL?.absoluteString else { return  }
-        var truncated = truncateString(urlString, fromSubstring: "&units=")
-        var newURL = truncated + "&units=\(newUnit.rawValue)"
+        guard let urlString = lastSearchURL?.absoluteString else { return  }
+        let truncated = truncateString(urlString, fromSubstring: "&units=")
+        let newURL = truncated + "&units=\(newUnit.rawValue)"
         guard let url = URL(string: newURL) else {return}
         fetchData(from: url)
-        
-        
     }
+    
     func truncateString(_ input: String, fromSubstring substring: String) -> String {
            if let range = input.range(of: substring) {
                let truncatedString = input.prefix(upTo: range.lowerBound)
@@ -112,7 +113,7 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
            return input
        }
     func fetchData(from url: URL) {
-        lastSearchURL = url
+        print("...............\(showInputErrorAlert)")
         APIManager.publisher(for: url)
             .sink (receiveCompletion: { (completion) in
                 switch completion {
@@ -120,6 +121,8 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                         return
                     case .failure(let error):
                         print(error.localizedDescription)
+                        self.showInputErrorAlert = true
+                        
                 }
                 print("completion - \(completion)")
             }, receiveValue: { (weatherData: WeatherData) in
@@ -127,6 +130,7 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                 if let name = weatherData.name, let condition = weatherData.weather?.first?.id, let temp = weatherData.main?.temp {
                     let weatherModel = WeatherModel(cityName: name, conditonID: condition, temperature: Float(temp))
                     self.searchHistory.append(weatherModel)
+                    self.lastSearchURL = url
                 }
                 
             })

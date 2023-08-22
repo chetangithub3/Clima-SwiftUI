@@ -16,7 +16,7 @@ public struct APIManager {
                 guard let response = response as? HTTPURLResponse, (200..<300).contains(response.statusCode) else {
                     throw URLError(URLError.badServerResponse)
                 }
-                return data               
+                return data
             }
             .decode(type: T.self, decoder: JSONDecoder())
             .subscribe(on: DispatchQueue.global(qos: .background))
