@@ -113,7 +113,6 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
            return input
        }
     func fetchData(from url: URL) {
-        print("...............\(showInputErrorAlert)")
         APIManager.publisher(for: url)
             .sink (receiveCompletion: { (completion) in
                 switch completion {
@@ -124,7 +123,6 @@ class ContentViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                         self.showInputErrorAlert = true
                         
                 }
-                print("completion - \(completion)")
             }, receiveValue: { (weatherData: WeatherData) in
                 
                 if let name = weatherData.name, let condition = weatherData.weather?.first?.id, let temp = weatherData.main?.temp {
