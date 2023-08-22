@@ -5,6 +5,8 @@
     //  Created by Chetan Dhowlaghar on 8/20/23.
     //
 
+    // Todo : Commenting the code better
+
 import SwiftUI
 
 struct ContentView: View {
@@ -25,19 +27,19 @@ struct ContentView: View {
                     } label: {
                         Image(systemName: "location.magnifyingglass")
                             .bold()
-                           
+                        
                     }.padding()
                         .background(Color.white)
                         .cornerRadius(10)
                     
                     TextField("City Name", text: $city)
                         .padding()
-                           .background(Color.white)
-                           .cornerRadius(10)
+                        .background(Color.white)
+                        .cornerRadius(10)
                     Button {
-                        //TODO:
-                        // Search for how to add cities with multiple words like new york
-                        //currently fails
+                            //TODO:
+                            // Search for how to add cities with multiple words like new york
+                            //currently fails
                         city =  city.trimmingCharacters(in: .whitespacesAndNewlines)
                         if city.isEmpty {
                             showNoInputAlert = true
@@ -48,7 +50,7 @@ struct ContentView: View {
                     } label: {
                         Image(systemName: "magnifyingglass")
                             .bold()
-                            
+                        
                     }.padding()
                         .background(Color.white)
                         .cornerRadius(10)
@@ -83,12 +85,12 @@ struct ContentView: View {
                     }.pickerStyle(.segmented)
                 }.padding(.vertical)
                 
-                .onChange(of: selectedUnit) { newValue in
-                    units = selectedUnit == .imperial ? "°F" : "°C"
-                    if lastSearchURL != nil{
-                        contentViewModel.getWeatherOnChangeOfUnits(newUnit: newValue)
+                    .onChange(of: selectedUnit) { newValue in
+                        units = selectedUnit == .imperial ? "°F" : "°C"
+                        if lastSearchURL != nil{
+                            contentViewModel.getWeatherOnChangeOfUnits(newUnit: newValue)
+                        }
                     }
-                }
                 HStack(alignment: .center, spacing: 20) {
                     VStack{
                         Text(contentViewModel.searchHistory.last?.cityName ?? "")
@@ -101,7 +103,7 @@ struct ContentView: View {
                         }
                     }
                     
-                   
+                    
                 }
                 Spacer()
                 Button {
@@ -112,14 +114,11 @@ struct ContentView: View {
                         Text("Search History")
                             .bold()
                             .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
+                            .background(Color.white)
+                            .cornerRadius(10)
                         Spacer()
                     }
-                    
                 }
-                
-                
                 
             }.padding()
                 .navigationTitle("Clima-SwiftUI")
