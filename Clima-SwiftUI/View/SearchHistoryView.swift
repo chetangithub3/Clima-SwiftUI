@@ -16,7 +16,7 @@ struct SearchHistoryView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .padding()
- 
+            ScrollView{
                 ForEach(contentViewModel.searchHistory.reversed()) { item in
                     HStack{
                         VStack(alignment: .leading){
@@ -34,6 +34,8 @@ struct SearchHistoryView: View {
                         .cornerRadius(10)
                     
                 }
+            }
+             
             Spacer()
         }.padding()
         .background(Color(red: 246/255, green: 244/255, blue: 235/255))
